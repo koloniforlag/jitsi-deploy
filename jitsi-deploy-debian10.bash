@@ -27,4 +27,4 @@ debconf-set-selections ./debconf-values
 # Install the Jitsi packages
 apt-get install jitsi-meet -y
 # Install Let's Encrypt certificate
-/usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh
+#/usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh
