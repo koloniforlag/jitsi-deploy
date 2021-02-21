@@ -30,7 +30,7 @@ debconf-set-selections ./debconf-values
 # Install the Jitsi packages
 apt-get install jitsi-meet -y
 # Remove email prompt in Let's Encrypt script
-sed "s,^read EMAIL$,EMAIL=info@${SERVICE_ADDRESS}" $LE_SCRIPT
+sed -i "s,^read EMAIL$,EMAIL=info@${SERVICE_ADDRESS}," $LE_SCRIPT
 # Install a Let's Encrypt certificate if/when $SERVICE_ADDRESS
 # resolves to this host
 while true; do
