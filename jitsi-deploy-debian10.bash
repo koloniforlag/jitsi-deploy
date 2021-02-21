@@ -11,7 +11,7 @@ if ! [[ -n $SERVICE_ADDRESS ]]; then
 fi
 
 # Update repos
-apt-get update -y
+apt-get update
 # Install required tools
 apt-get install gnupg2 curl -y
 # Fetch Jitsi GPG key
@@ -19,12 +19,20 @@ curl https://download.jitsi.org/jitsi-key.gpg.key | sudo sh -c 'gpg --dearmor > 
 # Configure Jitsi repos
 echo 'deb [signed-by=/usr/share/keyrings/jitsi-keyring.gpg] https://download.jitsi.org stable/' | tee /etc/apt/sources.list.d/jitsi-stable.list > /dev/null
 # Update repos
-apt-get update -y
+apt-get update
 # Add current DNS name to debconf values
 sed -i "s,FQDN,${SERVICE_ADDRESS}," ./debconf-values
 # Pre-seed debconf database
 debconf-set-selections ./debconf-values
 # Install the Jitsi packages
 apt-get install jitsi-meet -y
-# Install Let's Encrypt certificate
-#/usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh
+# Install a Let's Encrypt certificate if/when $SERVICE_ADDRESS
+# resolves to this host
+while true; do
+  curl "${SERVICE_ADDRESS}/thisisatest" &&
+    grep -q thisisatest /var/log/nginx/access.log && {
+      /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh
+      exit
+    }
+  sleep 5
+done
