@@ -1,9 +1,2 @@
-jitsi-meet-prosody	jitsi-meet-prosody/jvb-hostname	string	FQDN
-jicofo	jitsi-videobridge/jvb-hostname	string	FQDN
-jitsi-meet-prosody	jitsi-videobridge/jvb-hostname	string	FQDN
-jitsi-meet-turnserver	jitsi-videobridge/jvb-hostname	string	FQDN
-jitsi-meet-web-config	jitsi-videobridge/jvb-hostname	string	FQDN
 jitsi-videobridge2	jitsi-videobridge/jvb-hostname	string	FQDN
-jitsi-meet-web-config	jitsi-meet/jvb-hostname	string	FQDN
 jitsi-meet-web-config	jitsi-meet/cert-choice	select	Generate a new self-signed certificate (You will later get a chance to obtain a Let's encrypt certificate)
-jitsi-meet-turnserver	jitsi-meet-turnserver/jvb-hostname	string	FQDN

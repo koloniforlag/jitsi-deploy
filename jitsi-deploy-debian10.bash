@@ -6,7 +6,7 @@ set -ex
 exec &> ./$(basename $0).log
 
 SERVICE_ADDRESS=$1
-LE_SCRIPT=/usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh
+LETSENCRYPT_SCRIPT=/usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh
 
 if ! [[ -n $SERVICE_ADDRESS ]]; then
   echo 'Error: This script requires a DNS name for the service as an argument.'
@@ -30,13 +30,13 @@ debconf-set-selections ./debconf-values
 # Install the Jitsi packages
 apt-get install jitsi-meet -y
 # Remove email prompt in Let's Encrypt script
-sed -i "s,^read EMAIL$,EMAIL=info@${SERVICE_ADDRESS}," $LE_SCRIPT
+sed -i "s,^read EMAIL$,EMAIL=info@${SERVICE_ADDRESS}," $LETSENCRYPT_SCRIPT
 # Install a Let's Encrypt certificate if/when $SERVICE_ADDRESS
 # resolves to this host
 while true; do
   curl "${SERVICE_ADDRESS}/thisisatest" &&
     grep -q thisisatest /var/log/nginx/access.log && {
-      $LE_SCRIPT
+      $LETSENCRYPT_SCRIPT
       exit
     }
   sleep 5
