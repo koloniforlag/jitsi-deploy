@@ -13,8 +13,8 @@ if ! [[ -n $SERVICE_ADDRESS ]]; then
   exit 1
 fi
 
-# Update repos
-apt-get update
+# Refresh repos and update all installed packages
+apt-get update ; apt-get upgrade -y
 # Install required tools
 apt-get install gnupg2 curl -y
 # Fetch Jitsi GPG key
@@ -29,12 +29,14 @@ sed -i "s,FQDN,${SERVICE_ADDRESS}," ./debconf-values
 debconf-set-selections ./debconf-values
 # Install the Jitsi packages
 apt-get install jitsi-meet -y
+# Install Prometheus Node Exporter
+apt-get install prometheus-node-exporter -y
 # Remove email prompt in Let's Encrypt script
 sed -i "s,^read EMAIL$,EMAIL=info@${SERVICE_ADDRESS}," $LETSENCRYPT_SCRIPT
 # Install a Let's Encrypt certificate if/when $SERVICE_ADDRESS
 # resolves to this host
 while true; do
-  curl "${SERVICE_ADDRESS}/thisisatest" &&
+  curl --silent "${SERVICE_ADDRESS}/thisisatest" >/dev/null &&
     grep -q thisisatest /var/log/nginx/access.log && {
       $LETSENCRYPT_SCRIPT
       exit
