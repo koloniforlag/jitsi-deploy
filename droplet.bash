@@ -4,8 +4,6 @@
 # server. Different machine sizes can be chosen by specifying number
 # of CPU cores as second argument to the script.
 
-set -x
-
 main() {
   check_env_vars
   case "$1" in
