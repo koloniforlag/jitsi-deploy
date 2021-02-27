@@ -3,7 +3,6 @@
 # provider. Replace "SERVICE_ADDRESS" with the installation's DNS name.
 apt-get update
 apt-get install git -y
-cd /tmp
 git clone https://github.com/koloniforlag/jitsi-deploy
 cd jitsi-deploy
 ./jitsi-deploy-debian10.bash SERVICE_ADDRESS
