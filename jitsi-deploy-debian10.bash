@@ -1,9 +1,7 @@
 #! /bin/bash
 # Installs Jitsi Meet on Debian 10.
 
-set -ex
-
-exec &> ./$(basename $0).log
+set -x
 
 SERVICE_ADDRESS=$1
 LETSENCRYPT_SCRIPT=/usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh

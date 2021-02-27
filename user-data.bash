@@ -5,4 +5,4 @@ apt-get update
 apt-get install git -y
 git clone https://github.com/koloniforlag/jitsi-deploy
 cd jitsi-deploy
-./jitsi-deploy-debian10.bash SERVICE_ADDRESS
+./jitsi-deploy-debian10.bash SERVICE_ADDRESS &> jitsi-deploy.log
