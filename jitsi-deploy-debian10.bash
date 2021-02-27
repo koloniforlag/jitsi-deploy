@@ -1,9 +1,7 @@
 #! /bin/bash
 # Installs Jitsi Meet on Debian 10.
 
-set -ex
-
-exec &> ./$(basename $0).log
+set -x
 
 SERVICE_ADDRESS=$1
 LETSENCRYPT_SCRIPT=/usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh
@@ -14,7 +12,7 @@ if ! [[ -n $SERVICE_ADDRESS ]]; then
 fi
 
 # Refresh repos and update all installed packages
-apt-get update ; apt-get upgrade -y
+apt-get update -y ; apt-get upgrade -y
 # Install required tools
 apt-get install gnupg2 curl -y
 # Fetch Jitsi GPG key
@@ -22,7 +20,7 @@ curl https://download.jitsi.org/jitsi-key.gpg.key | sudo sh -c 'gpg --dearmor > 
 # Configure Jitsi repos
 echo 'deb [signed-by=/usr/share/keyrings/jitsi-keyring.gpg] https://download.jitsi.org stable/' | tee /etc/apt/sources.list.d/jitsi-stable.list > /dev/null
 # Update repos
-apt-get update
+apt-get update -y
 # Add current DNS name to debconf values
 sed -i "s,FQDN,${SERVICE_ADDRESS}," ./debconf-values
 # Pre-seed debconf database
