@@ -170,7 +170,8 @@ assign_float_ip() {
         )
         curl_cmd -X POST \
           --data "$data" \
-          "https://api.digitalocean.com/v2/floating_ips/${FLOAT_IP}/actions"
+          "https://api.digitalocean.com/v2/floating_ips/${FLOAT_IP}/actions" |
+          jq -r ''
         break
       else
         # Machine is not ready. Let's wait some more.
