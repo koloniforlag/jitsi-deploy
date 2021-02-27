@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Manage a Debian 10 droplet on Digital Ocean configured as a Jitsi
-# Meet server. Different machines sizes can be chosen by specifying
-# number of vCPUs as the second argument.
+# Manage a Debian 10 Digital Ocean droplet configured as a Jitsi Meet
+# server. Different machine sizes can be chosen by specifying number
+# of CPU cores as second argument to the script.
 
 set -x
 
