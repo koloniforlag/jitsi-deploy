@@ -4,6 +4,12 @@
 # server. Different machine sizes can be chosen by specifying number
 # of CPU cores as second argument to the script.
 
+exec >> droplet.log 2>&1
+
+date
+
+set -ex
+
 main() {
   check_env_vars
   case "$1" in
@@ -116,7 +122,8 @@ create_machine() {
   # Create a new droplet
   curl_cmd -X POST \
     --data "$(creation_json_payload)" \
-    "https://api.digitalocean.com/v2/droplets/" | jq -r
+    "https://api.digitalocean.com/v2/droplets/" |
+    jq -r ''
 }
 
 droplet_status() {
@@ -129,20 +136,23 @@ droplet_status() {
 show_droplet() {
   # Show the first droplet with the tag "jitsi"
   curl_cmd -X GET \
-    "https://api.digitalocean.com/v2/droplets/$(get_droplet_id)" | jq -r
+    "https://api.digitalocean.com/v2/droplets/$(get_droplet_id)" |
+    jq -r ''
 }
 
 stop_droplet() {
   # Shut down ALL droplets with the tag "jitsi"
   curl_cmd -X POST \
     --data '{ "type": "shutdown" }' \
-    "https://api.digitalocean.com/v2/droplets/actions?tag_name=jitsi" | jq -r
+    "https://api.digitalocean.com/v2/droplets/actions?tag_name=jitsi" |
+    jq -r ''
 }
 
 destroy_droplet() {
   # Destroy ALL droplets with the tag "jitsi"
   curl_cmd -X DELETE \
-    "https://api.digitalocean.com/v2/droplets?tag_name=jitsi" | jq -r
+    "https://api.digitalocean.com/v2/droplets?tag_name=jitsi" |
+    jq -r ''
 }
 
 assign_float_ip() {
