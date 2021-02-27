@@ -16,7 +16,6 @@ main() {
     create)
       set_machine_size "$2"
       create_machine
-      readonly DROPLET_ID=$(get_droplet_id)
       assign_float_ip
       ;;
     show)
@@ -156,6 +155,7 @@ destroy_droplet() {
 }
 
 assign_float_ip() {
+  readonly DROPLET_ID=$(get_droplet_id)
   readonly FLOAT_IP=$(get_float_ip)
   if [[ -n "$FLOAT_IP" ]]; then
     # Assign the available floating IP to our new machine.
