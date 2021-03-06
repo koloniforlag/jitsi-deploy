@@ -186,8 +186,8 @@ assign_float_ip() {
   readonly FLOAT_IP=$(get_float_ip)
   if [[ -n "$FLOAT_IP" ]]; then
     # Assign the available floating IP to our new machine.
-    # First, we wait 2 minutes for the machine to become ready.
-    local countdown=120
+    # If the machine is not ready after 5 minutes, we give up.
+    local countdown=300
     while [[ $countdown -gt 0 ]]; do
       if [[ $(droplet_status) = active ]]; then
         # Machine is ready. Let's try to assign our floating IP to it.
@@ -206,9 +206,9 @@ assign_float_ip() {
         ((countdown-=5))
       fi
     done
+    echo "Warning: Floating IP not assigned. Timed out waiting for the machine to become ready."
   else
-    # We did not find an available floating IP. Let's do nothing.
-    :
+    echo "Warning: No available floating IP found."
   fi
 }
 
