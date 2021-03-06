@@ -14,28 +14,25 @@ declare MACHINE_SIZE  # The droplet's virtual hardware configuration
 declare DROPLET_ID    # The ID of the Digital Ocean droplet created by the script
 declare FLOAT_IP      # The first freely available DO "floating IP"
 
-exec >> droplet.log 2>&1
-
-date
-
-set -ex
-
 main() {
-  check_env_vars
   case "$1" in
     create)
+      pre_checks_and_start_logging
       set_machine_size "$2"
       create_machine
       assign_float_ip
       verify_cert
       ;;
     show)
+      pre_checks_and_start_logging
       show_droplet
       ;;
     stop)
+      pre_checks_and_start_logging
       stop_droplet
       ;;
     destroy)
+      pre_checks_and_start_logging
       destroy_droplet
       ;;
     *)
@@ -52,12 +49,15 @@ usage() {
 	EOF
 }
 
-check_env_vars() {
+pre_checks_and_start_logging() {
   # Required environment variables
   [[ -n $JITSI_ADDRESS ]] && [[ -n $API_TOKEN ]] || {
     echo 'Error: Please set both JITSI_ADDRESS and API_TOKEN.'
     exit 1
   }
+  exec >> droplet.log 2>&1
+  set -ex
+  date
 }
 
 set_machine_size() {
