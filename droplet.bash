@@ -47,7 +47,7 @@ main() {
 usage() {
   cat <<-EOF
 		Usage:
-      $0 create [<cpu_count>] | show | stop | destroy
+		  $(basename $0) create [<cpu_count>] | show | stop | destroy
 	EOF
 }
 
@@ -106,7 +106,7 @@ curl_cmd() {
   # Boilerplate for curl API call. Add arguments to this function.
   curl --silent \
     -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $API_TOKEN" \
+    -H "Authorization: Bearer ${API_TOKEN}" \
     "$@"
 }
 
