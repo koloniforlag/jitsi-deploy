@@ -3,10 +3,10 @@
 
 set -x
 
-SERVICE_ADDRESS=$1
+JITSI_ADDRESS=$1
 LETSENCRYPT_SCRIPT=/usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh
 
-if ! [[ -n $SERVICE_ADDRESS ]]; then
+if ! [[ -n $JITSI_ADDRESS ]]; then
   echo 'Error: This script requires a DNS name for the service as an argument.'
   exit 1
 fi
@@ -22,7 +22,7 @@ echo 'deb [signed-by=/usr/share/keyrings/jitsi-keyring.gpg] https://download.jit
 # Update repos
 apt-get update
 # Add current DNS name to debconf values
-sed -i "s,FQDN,${SERVICE_ADDRESS}," ./debconf-values
+sed -i "s,FQDN,${JITSI_ADDRESS}," ./debconf-values
 # Pre-seed debconf database
 debconf-set-selections ./debconf-values
 # Install the Jitsi packages
@@ -30,11 +30,11 @@ apt-get install jitsi-meet -y
 # Install Prometheus Node Exporter
 apt-get install prometheus-node-exporter -y
 # Remove email prompt in Let's Encrypt script
-sed -i "s,^read EMAIL$,EMAIL=info@${SERVICE_ADDRESS}," $LETSENCRYPT_SCRIPT
-# Install a Let's Encrypt certificate if/when $SERVICE_ADDRESS
+sed -i "s,^read EMAIL$,EMAIL=info@${JITSI_ADDRESS}," $LETSENCRYPT_SCRIPT
+# Install a Let's Encrypt certificate if/when $JITSI_ADDRESS
 # resolves to this host
 while true; do
-  curl --silent "${SERVICE_ADDRESS}/thisisatest" >/dev/null &&
+  curl --silent "${JITSI_ADDRESS}/thisisatest" >/dev/null &&
     grep -q thisisatest /var/log/nginx/access.log && {
       $LETSENCRYPT_SCRIPT
       exit
