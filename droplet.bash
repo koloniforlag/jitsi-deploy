@@ -35,6 +35,14 @@ main() {
       pre_checks_and_start_logging
       destroy_droplet
       ;;
+    getid)
+      pre_checks_and_start_logging
+      get_droplet_id
+      ;;
+    assignfloat)
+      pre_checks_and_start_logging
+      assign_float_ip
+      ;;
     *)
       usage
       exit 1
