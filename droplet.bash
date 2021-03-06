@@ -27,6 +27,7 @@ main() {
       set_machine_size "$2"
       create_machine
       assign_float_ip
+      verify_cert
       ;;
     show)
       show_droplet
@@ -210,6 +211,31 @@ assign_float_ip() {
   else
     echo "Warning: No available floating IP found."
   fi
+}
+
+verify_cert() {
+  local countdown=300  # Fail after five minutes of repeated attempts
+  local email_subject='Jitsi TLS status:'
+  local openssl_result
+
+  sleep 2m  # No use in trying to connect right away; the installation takes a while.
+
+  # We don't want the script to abort if the openssl command fails:
+  set +e
+
+  while [[ $countdown -gt 0 ]]; do
+    openssl_result=$(
+      echo '' | openssl s_client -connect ${FLOAT_IP}:443 2>&1 | grep -B1 '^verify '
+    )
+    if [[ $openssl_result =~ "Let's Encrypt" ]]; then
+      echo "$openssl_result" | mail -s "${email_subject} OK" root
+      return
+    else
+      sleep 10
+      (( countdown-=10 ))
+    fi
+  done
+  echo "$openssl_result" | mail -s "${email_subject} FAIL" root
 }
 
 main "$@"
