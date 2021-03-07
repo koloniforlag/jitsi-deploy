@@ -2,7 +2,17 @@
 
 # Manage a Debian 10 Digital Ocean droplet configured as a Jitsi Meet
 # server. Different machine sizes can be chosen by specifying number
-# of CPU cores as second argument to the script.
+# of CPU cores as a second argument to the script.
+
+# This script requires the following environment variables to be set:
+# JITSI_ADDRESS = The DNS address to your Jitsi instance
+# API_TOKEN     = Your Digital Ocean API auth token
+
+# Global variables
+declare CPU_COUNT     # Desired number of CPU cores for the droplet
+declare MACHINE_SIZE  # The droplet's virtual hardware configuration
+declare DROPLET_ID    # The ID of the Digital Ocean droplet created by the script
+declare FLOAT_IP      # The first freely available DO "floating IP"
 
 exec >> droplet.log 2>&1
 
