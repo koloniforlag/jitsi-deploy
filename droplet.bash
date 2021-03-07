@@ -113,9 +113,26 @@ curl_cmd() {
 get_droplet_id() {
   # Get ID of the first droplet tagged "jitsi".
   # N.B. not intended to work with multiple Jitsi droplets.
-  curl_cmd -X GET \
-    "https://api.digitalocean.com/v2/droplets?tag_name=jitsi" |
-    jq '.droplets[0]|.id?'
+  # We make several attempts, with a few seconds in between, before exiting
+  # with a warning if we failed to get an ID.
+  local droplet_id
+  local countdown=30
+  while [[ $countdown -gt 0 ]]; do
+    droplet_id=$(
+      curl_cmd -X GET \
+        "https://api.digitalocean.com/v2/droplets?tag_name=jitsi" |
+        jq '.droplets[0]|.id?'
+    )
+    if [[ $droplet_id =~ [0-9]+ ]]; then
+      echo $droplet_id
+      return
+    else
+      sleep 2
+      (( countdown-=2 ))
+    fi
+  done
+  echo 'Error: Failed to find droplet ID!'
+  exit 1
 }
 
 get_float_ip() {
