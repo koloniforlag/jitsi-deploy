@@ -8,6 +8,9 @@
 # JITSI_ADDRESS = The DNS address to your Jitsi instance
 # API_TOKEN     = Your Digital Ocean API auth token
 
+# N.B. The Digital Ocean IDs of two authorized SSH public keys are
+# hardcoded into this script.
+
 # Global variables
 declare CPU_COUNT     # Desired number of CPU cores for the droplet
 declare MACHINE_SIZE  # The droplet's virtual hardware configuration
