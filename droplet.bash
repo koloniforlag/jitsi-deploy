@@ -99,7 +99,7 @@ creation_json_payload() {
   "image": "debian-10-x64",
   "ssh_keys": [
     29452254,
-    29819106
+    30309751
   ],
   "user_data": "#!/bin/bash\n
 apt-get update\n
