@@ -84,8 +84,8 @@ set_machine_size() {
       ;;
     *)
       # Default is 4 dedicated cores
-      echo "INFO: No CPU count specified on command line; using default of 4 CPUs."
-      readonly MACHINE_SIZE="c-4"
+      echo "INFO: No CPU count specified on command line; using default of 2 CPUs."
+      readonly MACHINE_SIZE="c-2"
       ;;
   esac
 }
