@@ -148,12 +148,12 @@ get_droplet_id() {
 }
 
 get_float_ip() {
-# Get any unused floating IP
-curl_cmd -X GET \
-  "https://api.digitalocean.com/v2/floating_ips" |
-  jq '' |
-  grep -B1 '"droplet": null' |
-  grep -o -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+  # The jq command returns the first floating IP JSON object which
+  # does not contain a value for the "droplet" key. (Also matches if
+  # the "droplet" key is absent.)
+  curl_cmd -X GET \
+    "https://api.digitalocean.com/v2/floating_ips" |
+    jq --join-output '[.floating_ips[] | select(.droplet==null).ip][0]'
 }
 
 create_machine() {
