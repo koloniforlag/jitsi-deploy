@@ -36,8 +36,8 @@ sed -i "s,^read EMAIL$,EMAIL=info@${JITSI_ADDRESS}," $LETSENCRYPT_SCRIPT
 while true; do
   curl --silent "${JITSI_ADDRESS}/thisisatest" >/dev/null &&
     grep -q thisisatest /var/log/nginx/access.log && {
-      # Use the Letsencrypt staging CA during tests
-      sed -i 's,certbot certonly,certbot certonly --test-cert,' $LETSENCRYPT_SCRIPT
+      ## Use the Letsencrypt staging CA during tests
+      #sed -i 's,certbot certonly,certbot certonly --test-cert,' $LETSENCRYPT_SCRIPT
       $LETSENCRYPT_SCRIPT
       exit
     }
