@@ -194,9 +194,10 @@ destroy_droplet() {
 }
 
 assign_float_ip() {
+  local fail_email_subject='Jitsi server setup FAILED'
   readonly DROPLET_ID=$(get_droplet_id)
   readonly FLOAT_IP=$(get_float_ip)
-  if [[ -n "$FLOAT_IP" ]]; then
+  if [[ "$FLOAT_IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     # Assign the available floating IP to our new machine.
     # If the machine is not ready after 5 minutes, we give up.
     local countdown=300
@@ -218,9 +219,12 @@ assign_float_ip() {
         ((countdown-=5))
       fi
     done
-    echo "Warning: Floating IP not assigned. Timed out waiting for the machine to become ready."
+    echo "Timed out waiting for the VM to become ready." |
+      mail -s "${fail_email_subject}" root
+      exit 1
   else
-    echo "Warning: No available floating IP found."
+    echo "No available floating IP found." | mail -s "${fail_email_subject}" root
+    exit 1
   fi
 }
 
@@ -238,7 +242,7 @@ verify_cert() {
     openssl_result=$(
       echo '' | openssl s_client -connect ${FLOAT_IP}:443 2>&1 | grep -B1 '^verify '
     )
-    if [[ $openssl_result =~ "Let's Encrypt" ]]; then
+    if [[ $openssl_result =~ "Let's Encrypt.*${JITSI_ADDRESS}" ]]; then
       echo "$openssl_result" | mail -s "${email_subject} OK" root
       return
     else
@@ -247,6 +251,7 @@ verify_cert() {
     fi
   done
   echo "$openssl_result" | mail -s "${email_subject} FAIL" root
+  exit 1
 }
 
 main "$@"
