@@ -234,11 +234,11 @@ assign_float_ip() {
 }
 
 verify_cert() {
-  local countdown=300  # Fail after five minutes of repeated attempts
+  local countdown=600  # Fail after 10 minutes of repeated attempts
   local email_subject='Jitsi TLS status:'
   local openssl_result
 
-  sleep 2m  # No use in trying to connect right away; the installation takes a while.
+  sleep 3m  # No use in trying to connect right away; the installation takes a while.
 
   # We don't want the script to abort if the openssl command fails:
   set +e
