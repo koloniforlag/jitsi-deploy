@@ -71,7 +71,7 @@ pre_checks_and_start_logging() {
     echo 'Error: Please set both JITSI_ADDRESS and API_TOKEN.'
     exit 1
   }
-  exec > droplet.log 2>&1
+  exec >> droplet.log 2>&1
   set -ex
   date
 }
