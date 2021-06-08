@@ -71,7 +71,7 @@ pre_checks_and_start_logging() {
     echo 'Error: Please set both JITSI_ADDRESS and API_TOKEN.'
     exit 1
   }
-  exec > droplet.log 2>&1
+  exec >> droplet.log 2>&1
   set -ex
   date
   # Ugly testing switch
@@ -252,7 +252,11 @@ verify_cert() {
     openssl_result=$(
       echo '' | openssl s_client -connect ${FLOAT_IP}:443 2>&1 | grep -B1 '^verify '
     )
-    regex="Let's Encrypt.*${JITSI_ADDRESS}.*verify return:1"
+    if [[ -n "$TESTFLAG" ]]; then
+      regex="(STAGING) Internet Security Research Group"
+    else
+      regex="Let's Encrypt.*${JITSI_ADDRESS}.*verify return:1"
+    fi
     if [[ $openssl_result =~ $regex ]]; then
       echo "$openssl_result" | mail -s "${email_subject} OK" root
       return
