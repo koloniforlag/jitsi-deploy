@@ -247,7 +247,11 @@ verify_cert() {
     openssl_result=$(
       echo '' | openssl s_client -connect ${FLOAT_IP}:443 2>&1 | grep -B1 '^verify '
     )
-    regex="Let's Encrypt.*${JITSI_ADDRESS}.*verify return:1"
+    if [[ -n "$TESTFLAG" ]]; then
+      regex="(STAGING) Internet Security Research Group"
+    else
+      regex="Let's Encrypt.*${JITSI_ADDRESS}.*verify return:1"
+    fi
     if [[ $openssl_result =~ $regex ]]; then
       echo "$openssl_result" | mail -s "${email_subject} OK" root
       return
