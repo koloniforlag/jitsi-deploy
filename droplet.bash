@@ -21,6 +21,11 @@ main() {
   case "$1" in
     create)
       pre_checks_and_start_logging
+      # Ugly testing switch
+      if [[ $3 = 'test' ]]; then
+        echo 'Test mode enabled.'
+        TESTFLAG=true
+      fi
       set_machine_size "$2"
       create_machine
       assign_float_ip
@@ -66,7 +71,7 @@ pre_checks_and_start_logging() {
     echo 'Error: Please set both JITSI_ADDRESS and API_TOKEN.'
     exit 1
   }
-  exec >> droplet.log 2>&1
+  exec > droplet.log 2>&1
   set -ex
   date
   # Ugly testing switch
@@ -234,11 +239,11 @@ assign_float_ip() {
 }
 
 verify_cert() {
-  local countdown=300  # Fail after five minutes of repeated attempts
+  local countdown=600  # Fail after 10 minutes of repeated attempts
   local email_subject='Jitsi TLS status:'
   local openssl_result
 
-  sleep 2m  # No use in trying to connect right away; the installation takes a while.
+  sleep 3m  # No use in trying to connect right away; the installation takes a while.
 
   # We don't want the script to abort if the openssl command fails:
   set +e
