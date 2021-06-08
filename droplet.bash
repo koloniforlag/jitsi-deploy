@@ -21,6 +21,11 @@ main() {
   case "$1" in
     create)
       pre_checks_and_start_logging
+      # Ugly testing switch
+      if [[ $3 = 'test' ]]; then
+        echo 'Test mode enabled.'
+        TESTFLAG=true
+      fi
       set_machine_size "$2"
       create_machine
       assign_float_ip
@@ -66,7 +71,7 @@ pre_checks_and_start_logging() {
     echo 'Error: Please set both JITSI_ADDRESS and API_TOKEN.'
     exit 1
   }
-  exec >> droplet.log 2>&1
+  exec > droplet.log 2>&1
   set -ex
   date
 }
@@ -106,7 +111,7 @@ apt-get update\n
 apt-get install git -y\n
 git clone https://github.com/koloniforlag/jitsi-deploy\n
 cd jitsi-deploy\n
-./jitsi-deploy-debian10.bash ${JITSI_ADDRESS} &> jitsi-deploy.log\n",
+./jitsi-deploy-debian10.bash ${JITSI_ADDRESS} ${TESTFLAG} &> jitsi-deploy.log\n",
   "tags": [
     "jitsi"
   ]
