@@ -248,7 +248,7 @@ verify_cert() {
       echo '' | openssl s_client -connect ${FLOAT_IP}:443 2>&1 | grep -B1 '^verify '
     )
     if [[ -n "$TESTFLAG" ]]; then
-      regex="(STAGING) Internet Security Research Group"
+      regex='\(STAGING\) Internet Security Research Group'
     else
       regex="Let's Encrypt.*${JITSI_ADDRESS}.*verify return:1"
     fi
