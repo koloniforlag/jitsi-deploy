@@ -74,6 +74,11 @@ pre_checks_and_start_logging() {
   exec >> droplet.log 2>&1
   set -ex
   date
+  # Ugly testing switch
+  if [[ $3 = 'test' ]]; then
+    echo 'Test mode enabled.'
+    TESTFLAG=on
+  fi
 }
 
 set_machine_size() {
